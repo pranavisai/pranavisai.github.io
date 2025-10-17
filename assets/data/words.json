@@ -79,6 +79,21 @@
     { "german": "der Ort", "english": "Place / Town" },
     { "german": "das Geburtsdatum", "english": "Date of Birth" },
     { "german": "das Datum", "english": "Date" },
-    { "german": "die Anmeldebescheinigung", "english": "Registration Certificate" }
+    { "german": "die Anmeldebescheinigung", "english": "Registration Certificate" },
+
+    { "german": "die Wunde", "english": "Wound" },
+    { "german": "der Unfall", "english": "Accident" },
+    { "german": "die Überweisung", "english": "Referral" },
+    { "german": "das Rezept", "english": "Prescription" },
+    { "german": "entzündet", "english": "inflamed" },
+    { "german": "nötig", "english": "necessary" },
+    { "german": "die Nebenwirkungen", "english": "Side Effects" },
+    { "german": "das Beispiel", "english": "Example" },
+    { "german": "die Übelkeit", "english": "Nausea" },
+    { "german": "der Blumenstrauß", "english": "Bouquet" },
+    { "german": "das Einzelzimmer", "english": "Single Room" },
+    { "german": "das Krankenhaus", "english": "Hospital" },
+    { "german": "übel", "english": "sick / unwell" },
+    { "german": "schwindelig", "english": "dizzy" }
   ]
 }
