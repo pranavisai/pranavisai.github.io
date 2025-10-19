@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Das Wort – Fill in the Blanks</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="wrapper">
+    <div class="container" id="container">
+      <h1>Fill in the Blanks ✍️</h1>
+      <p>Type the missing word in German!</p>
+
+      <div class="flashcard" id="question-box">
+        <div id="sentence" style="font-size: 1.6rem; margin: 20px;"></div>
+        <input
+          id="answer"
+          type="text"
+          placeholder="Your answer"
+          style="
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #b266ff;
+            width: 80%;
+            font-size: 1rem;
+          "
+        />
+      </div>
+      <div class="feedback-box">
+        <p id="feedback"></p>
+    </div>      
+
+      <div class="buttons">
+        <button id="check">Check</button>
+        <button id="next">Next</button>
+        <a href="index.html" class="back-link">← Back</a>
+      </div>
+
+      <p id="score" style="margin-top: 15px; color: #4b0082; font-weight: 600;"></p>
+    </div>
+  </div>
+
+  <script src="assets/js/fill.js"></script>
+</body>
+</html>
