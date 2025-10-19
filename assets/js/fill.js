@@ -1,143 +1,115 @@
-// assets/js/fill.js
-let words = [];
-let currentIndex = 0;
-let score = 0;
-const TOTAL_QUESTIONS = 10;
+document.addEventListener("DOMContentLoaded", () => {
+  let words = [];
+  let currentIndex = 0;
+  let score = 0;
+  const TOTAL_QUESTIONS = 10;
 
-async function loadWords() {
-  try {
-    const res = await fetch("assets/data/words.json");
-    const data = await res.json();
-
-    // Shuffle and pick exactly TOTAL_QUESTIONS unique words
-    const shuffled = data.words.sort(() => Math.random() - 0.5);
-    words = shuffled.slice(0, Math.min(TOTAL_QUESTIONS, shuffled.length));
-
-    // reset state
-    currentIndex = 0;
-    score = 0;
-    updateScore();
-    prepareUI();
-    showQuestion();
-  } catch (err) {
-    console.error("Error loading words:", err);
-    document.getElementById("sentence").textContent = "⚠️ Couldn't load words.";
-  }
-}
-
-function prepareUI() {
+  const sentenceBox = document.getElementById("sentence");
+  const answerInput = document.getElementById("answer");
+  const feedback = document.getElementById("feedback");
   const checkBtn = document.getElementById("check");
   const nextBtn = document.getElementById("next");
-  checkBtn.disabled = false;
-  nextBtn.disabled = false;
-  document.getElementById("feedback").textContent = "";
-  document.getElementById("answer").value = "";
-}
+  const scoreEl = document.getElementById("score");
 
-function showQuestion() {
-  const feedback = document.getElementById("feedback");
-  const answerInput = document.getElementById("answer");
-  const sentenceBox = document.getElementById("sentence");
-
-  feedback.textContent = "";
-  answerInput.value = "";
-
-  // End condition (also handles case when words < TOTAL_QUESTIONS)
-  if (currentIndex >= words.length) {
-    finishQuiz();
-    return;
+  async function loadWords() {
+    try {
+      const res = await fetch("assets/data/words.json");
+      const data = await res.json();
+      words = data.words.sort(() => Math.random() - 0.5).slice(0, TOTAL_QUESTIONS);
+      currentIndex = 0;
+      score = 0;
+      updateScore();
+      showQuestion();
+    } catch (err) {
+      sentenceBox.textContent = "⚠️ Couldn't load words.";
+      console.error(err);
+    }
   }
 
-  const current = words[currentIndex];
-  const german = current.german;
-  const english = current.english;
+  function showQuestion() {
+    feedback.textContent = "";
+    feedback.classList.remove("show");
+    answerInput.value = "";
+    answerInput.focus();
 
-  const parts = german.split(" ");
-  let blankSentence = "";
-  let missingPart = "";
+    if (currentIndex >= words.length) {
+      finishQuiz();
+      return;
+    }
 
-  // Randomly hide article or main word (if article exists)
-  if (parts.length > 1 && Math.random() < 0.5) {
-    missingPart = parts[0]; // article
-    blankSentence = german.replace(missingPart, "_____");
-  } else {
-    missingPart = parts[parts.length - 1]; // main word
-    blankSentence = german.replace(missingPart, "_____");
+    const current = words[currentIndex];
+    const german = current.german;
+    const english = current.english;
+
+    const parts = german.split(" ");
+    let blankSentence = "";
+    let missingPart = "";
+
+    if (parts.length > 1 && Math.random() < 0.5) {
+      missingPart = parts[0];
+      blankSentence = german.replace(missingPart, "_____");
+    } else {
+      missingPart = parts[parts.length - 1];
+      blankSentence = german.replace(missingPart, "_____");
+    }
+
+    sentenceBox.dataset.answer = missingPart;
+    sentenceBox.textContent = `Translate: ${english} → ${blankSentence}`;
+    updateScore();
   }
 
-  sentenceBox.dataset.answer = missingPart;
-  sentenceBox.textContent = `Translate: ${english} → ${blankSentence}`;
-  updateScore();
-}
+  function checkAnswer() {
+    const userAnswer = answerInput.value.trim().toLowerCase();
+    const correctAnswer = (sentenceBox.dataset.answer || "").toLowerCase();
 
-function checkAnswer() {
-  const feedback = document.getElementById("feedback");
-  const answerInput = document.getElementById("answer");
-  const sentenceBox = document.getElementById("sentence");
-  const checkBtn = document.getElementById("check");
+    if (!userAnswer) {
+      feedback.textContent = "⚠️ Please enter your answer!";
+      feedback.style.color = "orange";
+      feedback.classList.add("show");
+      return;
+    }
 
-  const userAnswer = answerInput.value.trim().toLowerCase();
-  const correctAnswer = (sentenceBox.dataset.answer || "").toLowerCase();
+    answerInput.blur();
 
-  if (!userAnswer) {
-    feedback.textContent = "⚠️ Please enter your answer!";
-    feedback.style.color = "orange";
-    return;
-  }
+    if (userAnswer === correctAnswer) {
+      feedback.textContent = "✅ Correct!";
+      feedback.style.color = "green";
+      score++;
+    } else {
+      feedback.textContent = `❌ Correct answer: ${correctAnswer}`;
+      feedback.style.color = "red";
+    }
 
-  // disable check to avoid double-submissions until user clicks Next
-  checkBtn.disabled = true;
-
-  if (userAnswer === correctAnswer) {
-    feedback.textContent = "✅ Correct!";
-    feedback.style.color = "green";
     feedback.classList.add("show");
-    score++;
-  } else {
-    feedback.textContent = `❌ Correct answer: ${correctAnswer}`;
-    feedback.style.color = "red";
+    updateScore();
   }
 
-  updateScore();
-}
-
-function nextQuestion() {
-  // increment index and either show next or finish
-  currentIndex++;
-  if (currentIndex >= words.length) {
-    // done
-    finishQuiz();
-  } else {
-    // make sure check button is enabled for the next question
-    document.getElementById("check").disabled = false;
+  function nextQuestion() {
+    currentIndex++;
     showQuestion();
   }
-}
 
-function updateScore() {
-  document.getElementById("score").textContent = `Score: ${score} / ${TOTAL_QUESTIONS}`;
-}
-
-function finishQuiz() {
-  // save final results in sessionStorage and redirect to result page
-  const finalScore = score;
-  // save both score and total actually used (in case words < TOTAL_QUESTIONS)
-  sessionStorage.setItem("dasWort_finalScore", finalScore);
-  sessionStorage.setItem("dasWort_totalQuestions", words.length);
-  window.location.href = "result.html";
-}
-
-// Event listeners
-document.getElementById("check").addEventListener("click", checkAnswer);
-document.getElementById("next").addEventListener("click", nextQuestion);
-
-// Start
-loadWords();
-
-// Allow pressing "Enter" to check the answer
-document.getElementById("answer").addEventListener("keydown", function (event) {
-  if (event.key === "Enter") {
-    event.preventDefault(); // prevent accidental form submission or reload
-    document.getElementById("check").click(); // trigger the same as clicking "Check"
+  function updateScore() {
+    scoreEl.textContent = `Score: ${score} / ${TOTAL_QUESTIONS}`;
   }
+
+  function finishQuiz() {
+    sessionStorage.setItem("dasWort_finalScore", score);
+    sessionStorage.setItem("dasWort_totalQuestions", words.length);
+    window.location.href = "result.html";
+  }
+
+  // Event listeners
+  checkBtn.addEventListener("click", checkAnswer);
+  nextBtn.addEventListener("click", nextQuestion);
+
+  // Enter key triggers check
+  answerInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      checkAnswer();
+    }
+  });
+
+  loadWords();
 });

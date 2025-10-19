@@ -1,4 +1,6 @@
-/* Wrapper */
+/* ==========================
+   Wrapper
+========================== */
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -8,22 +10,27 @@
   background-color: #f3e8ff; /* soft lavender */
 }
 
-/* Container */
+/* ==========================
+   Container
+========================== */
 .container {
   text-align: center;
   max-width: 600px;
-  padding: 40px;
-  background-color: #f9f0ff; /* very light lavender */
+  width: 90%;
+  padding: 20px;
+  background-color: #f9f0ff;
   border-radius: 20px;
   box-shadow: 0 6px 25px rgba(102, 38, 255, 0.15);
   margin: 0 auto;
-  animation: fadeIn 0.8s ease forwards; /* cute fade in */
+  animation: fadeIn 0.8s ease forwards;
 }
 
-/* Headings & Paragraphs */
+/* ==========================
+   Headings & Paragraphs
+========================== */
 h1, h2 {
-  font-family: 'Baloo 2', sans-serif; /* cute, bubbly font */
-  font-weight: 600;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
   font-size: 2.4rem;
   margin-bottom: 10px;
   color: #6a1b9a;
@@ -37,12 +44,15 @@ p {
   margin-top: 0.5rem;
 }
 
-/* Flashcards */
+/* ==========================
+   Flashcards
+========================== */
 .flashcard {
   width: 100%;
+  max-width: 400px;
   height: 140px;
   perspective: 1200px; /* depth for 3D flip */
-  margin: 10px;
+  margin: 10px auto;
 }
 
 .card-inner {
@@ -67,37 +77,38 @@ p {
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-  font-family: 'Baloo 2', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 2rem;
   background-color: #d9b3ff;
   color: #4b0082;
   box-shadow: 0 4px 15px rgba(102, 38, 255, 0.2);
-  backface-visibility: hidden;
 }
 
 .card-back {
   transform: rotateY(180deg);
   background-color: #b266ff;
   color: #fff;
-  pointer-events: none;       /* optional, prevents accidental clicks */
-  visibility: hidden;         /* hide by default */
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .flashcard.flipped .card-back {
-  visibility: visible;        /* show only when flipped */
+  visibility: visible;
 }
 
-/* Buttons & Links  */
+/* ==========================
+   Buttons & Links
+========================== */
 button, .mode-btn, .back-link {
-  font-family: 'Baloo 2', sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-weight: 600;
   margin: 10px;
-  padding: 14px 28px;
+  padding: 12px 20px;
   border: none;
   border-radius: 10px;
   background-color: #b266ff;
   color: white;
-  font-size: 1.1rem;
+  font-size: 1rem;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
@@ -114,50 +125,24 @@ button:hover, .mode-btn:hover, .back-link:hover {
   color: #4b0082;
 }
 
-/* Progress */
-#progress {
-  margin-top: 20px;
+/* ==========================
+   Progress & Score
+========================== */
+#progress, #score {
+  margin-top: 15px;
   font-size: 1.1rem;
   color: #4b0082;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(-10px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-#container h2 {
-  font-size: 1.5em;
-  color: #6a4fbf;
-}
-
-#container p {
-  font-size: 1.2em;
-  margin-bottom: 1rem;
-}
-
-.btn {
-  background-color: #cbb6f8;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background 0.2s ease;
-}
-
-.btn:hover {
-  background-color: #b59af2;
-}
-
+/* ==========================
+   Feedback Box
+========================== */
 .feedback-box {
-  height: 35px; /* fixes the height so container won't jump */
+  height: 35px; /* fixes container jump */
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0px;
+  margin: 5px 0;
 }
 
 #feedback {
@@ -168,7 +153,54 @@ button:hover, .mode-btn:hover, .back-link:hover {
   transition: opacity 0.3s ease;
 }
 
-/* Fade in when text appears */
 #feedback.show {
   opacity: 1;
+}
+
+/* ==========================
+   Animations
+========================== */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================
+   Responsive Styles
+========================== */
+@media (max-width: 480px) {
+  h1, h2 {
+    font-size: 1.8rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  .container {
+    padding: 15px;
+  }
+
+  input#answer {
+    width: 95%;
+    font-size: 0.95rem;
+  }
+
+  button, .mode-btn, .back-link {
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    margin: 5px 3px;
+  }
+
+  .flashcard {
+    height: 120px;
+  }
+
+  .card-front, .card-back {
+    font-size: 1.3rem;
+  }
+
+  .feedback-box {
+    height: 30px;
+  }
 }
